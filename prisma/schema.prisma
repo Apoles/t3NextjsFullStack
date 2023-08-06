@@ -48,8 +48,11 @@ model User {
     id            String    @id @default(cuid())
     name          String?
     email         String?   @unique
+    password      String
+    verified      Boolean   @default(false)
     emailVerified DateTime?
     image         String?
+    validation   UserValidation[]
     accounts      Account[]
     sessions      Session[]
 }
@@ -60,4 +63,23 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum UserValidationType {
+  EMAIL     @map("EMAIL")
+  PHONE     @map("PHONE")
+  PASSWORD  @map("PASSWORD")
+}
+
+
+model UserValidation {
+  id              String             @id @default(cuid())
+  createdAt       DateTime           @default(now())
+  validationType  UserValidationType
+  validationToken String             @unique
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@unique([validationType, userId])
 }

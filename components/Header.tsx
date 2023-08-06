@@ -50,7 +50,8 @@ const Header: React.FC = () => {
     right = (
       <div className="right">
         <p>
-          {session.user.name} ({session.user.email})
+          {session.user.name} ({session.user.email}) {session.user.id}{" "}
+          {session.user.name}
         </p>
 
         <button onClick={() => signOut()}>
